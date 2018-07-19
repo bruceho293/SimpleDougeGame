@@ -10,10 +10,9 @@ game.geometry("800x800+50+50")
 # Specify the frames in the game
 top = Frame(game, height = 200)
 mid = Frame(game, height = 400)
-bot = Frame(game, height = 200)
 top.pack(side = TOP)
 mid.pack()
-bot.pack(side = BOTTOM)
+
 # End of the frames
 
 
@@ -172,23 +171,27 @@ class Line:
     def flying(self):
         self.canvas.move(self.id, self.x, 0)
 
-oval = Oval(game_layout, "blue")
-rectangle = Rectangle(game_layout, "yellow")
-line = Line(game_layout)
-player = Player(game_layout, oval, rectangle, line, "red")
-
 Score = Label(mid)
 Score.pack(side = BOTTOM)
 
 
-game.bind_all("<Left>", player.move)
-game.bind_all("<Right>", player.move)
-game.bind_all("<Up>", player.move)
-game.bind_all("<Down>", player.move)
 
-score = 0
-t1 = 0.1
-while 1:
+
+def start_game():
+    oval = Oval(game_layout, "blue")
+    rectangle = Rectangle(game_layout, "yellow")
+    line = Line(game_layout)
+    player = Player(game_layout, oval, rectangle, line, "red")
+
+
+    game.bind_all("<Left>", player.move)
+    game.bind_all("<Right>", player.move)
+    game.bind_all("<Up>", player.move)
+    game.bind_all("<Down>", player.move)
+
+    score = 0
+    t1 = 0.1
+    while 1:
         oval.flying()
         pos1 = game_layout.coords(oval.id)
         if pos1[3] >= 400:
@@ -231,7 +234,14 @@ while 1:
         player.Game_over()
         gameOver = player.game_over
         if gameOver:
+            player.score = score
             break
-Score.config(text = "Game over. Your score is " + str(score))
+    Score.config(text = "Game over. Your score is " + str(player.score))
+
+start_button = Button(mid, text = "Start the game", command = start_game)
+start_button.pack(side = TOP)
+exit_button = Button(mid, text = "Close the game", command = game.destroy)
+exit_button.pack(side = TOP)
+
 game.mainloop()
 # End of the Middle Frame
