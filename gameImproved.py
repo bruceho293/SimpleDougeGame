@@ -236,6 +236,10 @@ def start_game():
         if gameOver:
             player.score = score
             break
+    game_layout.delete(player.id)
+    game_layout.delete(oval.id)
+    game_layout.delete(rectangle.id)
+    game_layout.delete(line.id)
     Score.config(text = "Game over. Your score is " + str(player.score))
 
 start_button = Button(mid, text = "Start the game", command = start_game)
